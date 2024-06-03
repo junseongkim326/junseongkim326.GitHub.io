@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카페 메뉴 계산기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    table {
+      width: 50%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    input[type="number"] {
+      width: 50px;
+    }
+    #total {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>카페 메뉴 계산기</h2>
+  <table>
+    <tr>
+      <th>메뉴</th>
+      <th>가격</th>
+      <th>수량</th>
+      <th>타입</th>
+    </tr>
+    <tr>
+      <td>아메리카노</td>
+      <td>핫: 3000원<br>아이스: 4000원</td>
+      <td><input type="number" id="americanoQty" value="0" min="0"></td>
+      <td>
+        <select id="americanoType">
+          <option value="hot">핫</option>
+          <option value="iced">아이스</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>카페라떼</td>
+      <td>핫: 4000원<br>아이스: 5000원</td>
+      <td><input type="number" id="latteQty" value="0" min="0"></td>
+      <td>
+        <select id="latteType">
+          <option value="hot">핫</option>
+          <option value="iced">아이스</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>카푸치노</td>
+      <td>핫: 4500원<br>아이스: 5500원</td>
+      <td><input type="number" id="cappuccinoQty" value="0" min="0"></td>
+      <td>
+        <select id="cappuccinoType">
+          <option value="hot">핫</option>
+          <option value="iced">아이스</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>에스프레소</td>
+      <td>핫: 3500원<br>아이스: 4500원</td>
+      <td><input type="number" id="espressoQty" value="0" min="0"></td>
+      <td>
+        <select id="espressoType">
+          <option value="hot">핫</option>
+          <option value="iced">아이스</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>아이스티</td>
+      <td>3500원</td>
+      <td><input type="number" id="icedTeaQty" value="0" min="0"></td>
+      <td>-</td>
+    </tr>
+  </table>
+  <button onclick="calculateTotal()">계산하기</button>
+  <p id="total">총 금액: 0원</p>
+
+  <script>
+    function calculateTotal() {
+      const basePrices = {
+        americano: 3000,
+        latte: 4000,
+        cappuccino: 4500,
+        espresso: 3500,
+        icedTea: 3500
+      };
+
+      const americanoQty = parseInt(document.getElementById('americanoQty').value);
+      const latteQty = parseInt(document.getElementById('latteQty').value);
+      const cappuccinoQty = parseInt(document.getElementById('cappuccinoQty').value);
+      const espressoQty = parseInt(document.getElementById('espressoQty').value);
+      const icedTeaQty = parseInt(document.getElementById('icedTeaQty').value);
+
+      const americanoType = document.getElementById('americanoType').value;
+      const latteType = document.getElementById('latteType').value;
+      const cappuccinoType = document.getElementById('cappuccinoType').value;
+      const espressoType = document.getElementById('espressoType').value;
+
+      let total = 0;
+
+      const americanoPrice = basePrices.americano + (americanoType === 'iced' ? 1000 : 0);
+      const lattePrice = basePrices.latte + (latteType === 'iced' ? 1000 : 0);
+      const cappuccinoPrice = basePrices.cappuccino + (cappuccinoType === 'iced' ? 1000 : 0);
+      const espressoPrice = basePrices.espresso + (espressoType === 'iced' ? 1000 : 0);
+
+      total += (americanoPrice * americanoQty);
+      total += (lattePrice * latteQty);
+      total += (cappuccinoPrice * cappuccinoQty);
+      total += (espressoPrice * espressoQty);
+      total += (basePrices.icedTea * icedTeaQty);
+
+      const details = [];
+      if (americanoQty > 0) details.push(`아메리카노 ${americanoType === 'hot' ? '핫' : '아이스'} ${americanoPrice * americanoQty}원`);
+      if (latteQty > 0) details.push(`카페라떼 ${latteType === 'hot' ? '핫' : '아이스'} ${lattePrice * latteQty}원`);
+      if (cappuccinoQty > 0) details.push(`카푸치노 ${cappuccinoType === 'hot' ? '핫' : '아이스'} ${cappuccinoPrice * cappuccinoQty}원`);
+      if (espressoQty > 0) details.push(`에스프레소 ${espressoType === 'hot' ? '핫' : '아이스'} ${espressoPrice * espressoQty}원`);
+      if (icedTeaQty > 0) details.push(`아이스티 ${basePrices.icedTea * icedTeaQty}원`);
+
+      document.getElementById('total').textContent = `${details.join(', ')}, 총합 ${total}원입니다.`;
+    }
+  </script>
+</body>
+</html>
